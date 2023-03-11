@@ -61,9 +61,7 @@ def version(message_type_indicator: str) -> Optional[str]:
     if not target_digit.isdigit():
         raise ValueError(f'Invalid message type indicator "{message_type_indicator}"!')
 
-    mapped_value = VERSION_MAPPING.get(target_digit, None)
-
-    return mapped_value
+    return VERSION_MAPPING.get(target_digit, None)
 
 
 def purpose(message_type_indicator: str) -> Optional[Purpose]:
@@ -100,6 +98,4 @@ def purpose(message_type_indicator: str) -> Optional[Purpose]:
     if not target_digit.isdigit():
         raise ValueError(f'Invalid message type indicator "{message_type_indicator}"!')
 
-    mapped_value = PURPOSE_MAPPING.get(target_digit, None)
-
-    return mapped_value
+    return PURPOSE_MAPPING.get(target_digit, None)
