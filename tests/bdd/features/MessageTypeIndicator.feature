@@ -134,3 +134,51 @@ Feature: MTI
     When I determine the indicators purpose
     Then there should be an error containing Invalid message type indicator
 
+
+  Scenario: Reversal Query x4x0
+    Given a message type indicator x4x0
+    When I determine if the message type indicator is a reversal
+    Then there should be no errors
+    And the result should be true
+
+  Scenario: Reversal Query x4x1
+    Given a message type indicator x4x1
+    When I determine if the message type indicator is a reversal
+    Then there should be no errors
+    And the result should be true
+
+  Scenario: Reversal Query x4x2
+    Given a message type indicator x4x2
+    When I determine if the message type indicator is a reversal
+    Then there should be no errors
+    And the result should be false
+
+  Scenario: Reversal Query x4x3
+    Given a message type indicator x4x3
+    When I determine if the message type indicator is a reversal
+    Then there should be no errors
+    And the result should be false
+
+  Scenario: Chargeback Query x4x0
+    Given a message type indicator x4x0
+    When I determine if the message type indicator is a chargeback
+    Then there should be no errors
+    And the result should be false
+
+  Scenario: Chargeback Query x4x1
+    Given a message type indicator x4x1
+    When I determine if the message type indicator is a chargeback
+    Then there should be no errors
+    And the result should be false
+
+  Scenario: Chargeback Query x4x2
+    Given a message type indicator x4x2
+    When I determine if the message type indicator is a chargeback
+    Then there should be no errors
+    And the result should be true
+
+  Scenario: Chargeback Query x4x3
+    Given a message type indicator x4x3
+    When I determine if the message type indicator is a chargeback
+    Then there should be no errors
+    And the result should be true

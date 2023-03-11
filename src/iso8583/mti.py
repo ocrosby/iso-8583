@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Optional
 
 
 class Purpose(Enum):
@@ -22,9 +21,6 @@ class Version(Enum):
     ISO_8583_2003 = 2
     NationalUse = 8
     PrivateUse = 9
-
-
-RESERVED_BY_ISO = 'Reserved by ISO'
 
 
 VERSION_MAPPING = {
@@ -54,48 +50,73 @@ PURPOSE_MAPPING = {
 }
 
 
-def version(message_type_indicator: str) -> Optional[str]:
-    """Return the version of the message type indicator."""
-    target_digit = message_type_indicator[0]
+class MessageTypeIndicator:
+    value: str
 
-    if not target_digit.isdigit():
-        raise ValueError(f'Invalid message type indicator "{message_type_indicator}"!')
+    def __init__(self, value: str):
+        self.value = value[:4]
 
-    return VERSION_MAPPING.get(target_digit, None)
+    @property
+    def version(self) -> Version:
+        """Return the version of the message type indicator."""
+        target_digit = self.value[0]
 
+        if not target_digit.isdigit():
+            raise ValueError(f'Invalid message type indicator "{self.value}"!')
 
-def purpose(message_type_indicator: str) -> Optional[Purpose]:
-    """Returns the overall purpose of the message.
+        return VERSION_MAPPING.get(target_digit, None)
 
-    Position two of the MTI specifies the overall purpose of the message.
+    @property
+    def purpose(self) -> Purpose:
+        """Returns the overall purpose of the message.
 
-    Authorization (x1xx)
-        Determine if funds are available, get an approval but do not post to account for reconciliation.
-        Dual message system (DMS), awaits file exchange for posting to the account.
+        Position two of the MTI specifies the overall purpose of the message.
 
-    Financial (x2xx)
-        Determine if funds are available, get an approval and post directly to the account.
-        Single message system (SMS), no file exchange after this.
+        Authorization (x1xx)
+            Determine if funds are available, get an approval but do not post to account for reconciliation.
+            Dual message system (DMS), awaits file exchange for posting to the account.
 
-    File (x3xx)
-        Used for hot-card, TMS and other exchanges
+        Financial (x2xx)
+            Determine if funds are available, get an approval and post directly to the account.
+            Single message system (SMS), no file exchange after this.
 
-    Reversal and Chargeback
-        Reversal (x4x0 or x4x1): Reverses the action of the previous authorization.
-        Chargeback (x4x2 or x4x3): Charges back a previously cleared financial message.
+        File (x3xx)
+            Used for hot-card, TMS and other exchanges
 
-    Reconciliation
-        Transmit settlement information message.
+        Reversal and Chargeback
+            Reversal (x4x0 or x4x1): Reverses the action of the previous authorization.
+            Chargeback (x4x2 or x4x3): Charges back a previously cleared financial message.
 
-    Administrative
-        Transmits administrative advice.  Often used for failure messages (e.g., message reject or failure to apply).
+        Reconciliation
+            Transmit settlement information message.
 
-    Network
-        Used for secure key exchange, logon, echo test and other network functions.
-    """
-    target_digit = message_type_indicator[1]
+        Administrative
+            Transmits administrative advice.  Often used for failure messages (e.g., message reject or failure to apply).
 
-    if not target_digit.isdigit():
-        raise ValueError(f'Invalid message type indicator "{message_type_indicator}"!')
+        Network
+            Used for secure key exchange, logon, echo test and other network functions.
+        """
+        target_digit = self.value[1]
 
-    return PURPOSE_MAPPING.get(target_digit, None)
+        if not target_digit.isdigit():
+            raise ValueError(f'Invalid message type indicator "{self.value}"!')
+
+        return PURPOSE_MAPPING.get(target_digit, None)
+
+    def is_reversal(self) -> bool:
+        """Returns whether the message type indicator is a reversal."""
+        if self.purpose != Purpose.ReversalAndChargeback:
+            return False
+
+        target_digit = self.value[3]
+
+        return target_digit in ['0', '1']
+
+    def is_chargeback(self) -> bool:
+        """Returns whether the message type indicator is a chargeback."""
+        if self.purpose != Purpose.ReversalAndChargeback:
+            return False
+
+        target_digit = self.value[3]
+
+        return target_digit in ['2', '3']

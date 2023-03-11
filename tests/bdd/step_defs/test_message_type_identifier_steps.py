@@ -1,6 +1,6 @@
-from src.iso8583 import mti
+from src.iso8583.mti import MessageTypeIndicator
 
-from pytest_bdd import scenario, given, when, then, parsers
+from pytest_bdd import scenario, given, when, parsers
 
 FEATURE_FILE = '../features/MessageTypeIndicator.feature'
 
@@ -56,7 +56,7 @@ def test_version_9xxx():
 
 
 @scenario(FEATURE_FILE, 'Version Zxxx')
-def test_version_Zxxx():
+def test_version_zxxx():
     pass
 
 
@@ -115,17 +115,57 @@ def test_purpose_xzxx():
     pass
 
 
-@given(parsers.parse('a message type indicator {message_type_indicator:S}'))
-def mti_setup(message_type_indicator: str, context):
-    context.setdefault('message_type_indicator', message_type_indicator)
+@scenario(FEATURE_FILE, 'Reversal Query x4x0')
+def test_reversal_query_x4x0():
+    pass
+
+
+@scenario(FEATURE_FILE, 'Reversal Query x4x1')
+def test_reversal_query_x4x1():
+    pass
+
+
+@scenario(FEATURE_FILE, 'Reversal Query x4x2')
+def test_reversal_query_x4x2():
+    pass
+
+
+@scenario(FEATURE_FILE, 'Reversal Query x4x3')
+def test_reversal_query_x4x3():
+    pass
+
+
+@scenario(FEATURE_FILE, 'Chargeback Query x4x0')
+def test_chargeback_query_x4x0():
+    pass
+
+
+@scenario(FEATURE_FILE, 'Chargeback Query x4x1')
+def test_chargeback_query_x4x1():
+    pass
+
+
+@scenario(FEATURE_FILE, 'Chargeback Query x4x2')
+def test_chargeback_query_x4x2():
+    pass
+
+
+@scenario(FEATURE_FILE, 'Chargeback Query x4x3')
+def test_chargeback_query_x4x3():
+    pass
+
+
+@given(parsers.parse('a message type indicator {value}'))
+def mti_setup(value: str, context):
+    mti = MessageTypeIndicator(value)
+    context.setdefault('message_type_indicator', mti)
 
 
 @when("I determine the indicators version")
 def mti_version(context, errors):
     try:
         message_type_indicator = context['message_type_indicator']
-        meaning = mti.version(message_type_indicator)
-        context.setdefault('result', str(meaning))
+        context.setdefault('result', str(message_type_indicator.version))
     except Exception as err:
         errors.append(err)
 
@@ -134,8 +174,24 @@ def mti_version(context, errors):
 def mti_purpose(context, errors):
     try:
         message_type_indicator = context['message_type_indicator']
-        meaning = mti.purpose(message_type_indicator)
+        context.setdefault('result', str(message_type_indicator.purpose))
+    except Exception as err:
+        errors.append(err)
 
-        context.setdefault('result', str(meaning))
+
+@when('I determine if the message type indicator is a reversal')
+def mti_is_reversal(context, errors):
+    try:
+        message_type_indicator = context['message_type_indicator']
+        context.setdefault('result', message_type_indicator.is_reversal())
+    except Exception as err:
+        errors.append(err)
+
+
+@when('I determine if the message type indicator is a chargeback')
+def mti_is_chargeback(context, errors):
+    try:
+        message_type_indicator = context['message_type_indicator']
+        context.setdefault('result', message_type_indicator.is_chargeback())
     except Exception as err:
         errors.append(err)

@@ -4,6 +4,8 @@ from typing import Dict, List
 
 from pytest_bdd import parsers, then
 
+from tests.tools.src import conversion
+
 
 @pytest.fixture
 def errors() -> List[Exception]:
@@ -22,7 +24,10 @@ def no_errors(errors):
 
 @then(parsers.parse('the result should be {expected_value}'))
 def validate_result(expected_value: any, context):
-    assert context.get('result') == expected_value
+    if conversion.is_boolean_string(expected_value):
+        expected_value = conversion.string_to_boolean(expected_value)
+        
+    assert expected_value == context.get('result')
 
 
 @then(parsers.parse('there should be an error containing {expected_substring}'))
