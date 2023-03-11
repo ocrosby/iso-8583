@@ -187,7 +187,6 @@ def mti_setup_undefined(context):
     context.setdefault('message_type_indicator', mti)
 
 
-
 @when("I determine the indicators version")
 def mti_version(context, errors):
     try:

@@ -2,7 +2,7 @@ import pytest
 
 from typing import Dict, List
 
-from pytest_bdd import parsers, then
+from pytest_bdd import parsers, given, then
 
 from tests.tools.src import conversion
 
@@ -17,6 +17,11 @@ def context() -> Dict[str, any]:
     return {}
 
 
+@given('an empty binary string')
+def empty_binary_string(context):
+    context['binary_string'] = ''
+
+
 @then("there should be no errors")
 def no_errors(errors):
     assert len(errors) == 0
@@ -26,8 +31,24 @@ def no_errors(errors):
 def validate_result(expected_value: any, context):
     if conversion.is_boolean_string(expected_value):
         expected_value = conversion.string_to_boolean(expected_value)
-        
-    assert expected_value == context.get('result')
+
+    if expected_value == 'empty':
+        result = context.get('result')
+        length = len(result)
+
+        assert length == 0
+    else:
+        assert expected_value == context.get('result')
+
+
+@then(parsers.parse('the result should be {expected_value} in hexadecimal'))
+def validate_result_hex(expected_value: str, context):
+    assert hex(int(expected_value)) == context.get('result')
+
+
+@then(parsers.parse('the result should be {expected_value} in binary'))
+def validate_result_binary(expected_value: str, context):
+    assert bin(int(expected_value)) == context.get('result')
 
 
 @then(parsers.parse('there should be an error containing {expected_substring}'))
