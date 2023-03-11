@@ -194,3 +194,13 @@ Feature: MTI
     When I determine if the message type indicator is a chargeback
     Then there should be no errors
     And the result should be false
+
+  Scenario: Chargeback Query None
+    Given an undefined message type indicator
+    When I determine if the message type indicator is a chargeback
+    Then there should be an error containing Undefined message type indicator!
+
+  Scenario: Reversal Query None
+    Given an undefined message type indicator
+    When I determine if the message type indicator is a reversal
+    Then there should be an error containing Undefined message type indicator!

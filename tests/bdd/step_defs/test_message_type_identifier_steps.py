@@ -165,10 +165,27 @@ def test_chargeback_query_x0x0():
     pass
 
 
+@scenario(FEATURE_FILE, 'Chargeback Query None')
+def test_chargeback_query_none():
+    pass
+
+
+@scenario(FEATURE_FILE, 'Reversal Query None')
+def test_reversal_query_none():
+    pass
+
+
 @given(parsers.parse('a message type indicator {value}'))
 def mti_setup(value: str, context):
     mti = MessageTypeIndicator(value)
     context.setdefault('message_type_indicator', mti)
+
+
+@given('an undefined message type indicator')
+def mti_setup_undefined(context):
+    mti = MessageTypeIndicator(None)
+    context.setdefault('message_type_indicator', mti)
+
 
 
 @when("I determine the indicators version")

@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional
 
 
 class Purpose(Enum):
@@ -51,10 +52,13 @@ PURPOSE_MAPPING = {
 
 
 class MessageTypeIndicator:
-    value: str
+    value: Optional[str]
 
-    def __init__(self, value: str):
-        self.value = value[:4]
+    def __init__(self, value: Optional[str]):
+        if value:
+            self.value = value[:4]
+        else:
+            self.value = None
 
     @property
     def version(self) -> Version:
@@ -105,6 +109,9 @@ class MessageTypeIndicator:
 
     def is_reversal(self) -> bool:
         """Returns whether the message type indicator is a reversal."""
+        if self.value is None:
+            raise ValueError(f'Undefined message type indicator!')
+
         if self.purpose != Purpose.ReversalAndChargeback:
             return False
 
@@ -114,6 +121,9 @@ class MessageTypeIndicator:
 
     def is_chargeback(self) -> bool:
         """Returns whether the message type indicator is a chargeback."""
+        if self.value is None:
+            raise ValueError(f'Undefined message type indicator!')
+
         if self.purpose != Purpose.ReversalAndChargeback:
             return False
 
