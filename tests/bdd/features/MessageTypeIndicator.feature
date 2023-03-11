@@ -159,6 +159,12 @@ Feature: MTI
     Then there should be no errors
     And the result should be false
 
+  Scenario: Reversal Query x0x0
+    Given a message type indicator x0x0
+    When I determine if the message type indicator is a reversal
+    Then there should be no errors
+    And the result should be false
+
   Scenario: Chargeback Query x4x0
     Given a message type indicator x4x0
     When I determine if the message type indicator is a chargeback
@@ -182,3 +188,9 @@ Feature: MTI
     When I determine if the message type indicator is a chargeback
     Then there should be no errors
     And the result should be true
+
+  Scenario: Chargeback Query x0x0
+    Given a message type indicator x0x0
+    When I determine if the message type indicator is a chargeback
+    Then there should be no errors
+    And the result should be false
