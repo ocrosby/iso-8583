@@ -155,6 +155,16 @@ def test_chargeback_query_x4x3():
     pass
 
 
+@scenario(FEATURE_FILE, 'Reversal Query x0x0')
+def test_reversal_query_x0x0():
+    pass
+
+
+@scenario(FEATURE_FILE, 'Chargeback Query x0x0')
+def test_chargeback_query_x0x0():
+    pass
+
+
 @given(parsers.parse('a message type indicator {value}'))
 def mti_setup(value: str, context):
     mti = MessageTypeIndicator(value)
