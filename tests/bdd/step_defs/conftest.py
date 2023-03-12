@@ -23,9 +23,6 @@ def context() -> Dict[str, any]:
 
 
 def pytest_bdd_step_error(request, feature, scenario, step, step_func, step_func_args, exception):
-    errors = request.getfixturevalue('errors')
-    errors.append(exception)
-
     print(f'Step failed: "{step}"')
 
 

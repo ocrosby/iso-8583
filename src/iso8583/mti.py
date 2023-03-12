@@ -27,6 +27,15 @@ class Function(Enum):
     ReservedByIso = 8
 
 
+class Origin(Enum):
+    Acquirer = 0
+    AcquirerRepeat = 1
+    Issuer = 2
+    IssuerRepeat = 3
+    Other = 4
+    ReservedByIso = 5
+
+
 class Version(Enum):
     ReservedByIso = -1
     ISO_8583_1987 = 0
@@ -73,6 +82,15 @@ FUNCTION_MAPPING = {
     '7': Function.InstructionAcknowledgement,
     '8': Function.ReservedByIso,
     '9': Function.ReservedByIso
+}
+
+ORIGIN_MAPPING = {
+    '0': Origin.Acquirer,
+    '1': Origin.AcquirerRepeat,
+    '2': Origin.Issuer,
+    '3': Origin.IssuerRepeat,
+    '4': Origin.Other,
+    '6': Origin.ReservedByIso,
 }
 
 
@@ -141,6 +159,15 @@ class MessageTypeIndicator:
             raise ValueError(f'Invalid message type indicator "{self.value}"!')
 
         return FUNCTION_MAPPING.get(target_digit, None)
+
+    @property
+    def origin(self) -> Origin:
+        target_digit = self.value[3]
+
+        if not target_digit.isdigit():
+            raise ValueError(f'Invalid message type indicator "{self.value}"!')
+
+        return ORIGIN_MAPPING.get(target_digit, None)
 
     def is_reversal(self) -> bool:
         """Returns whether the message type indicator is a reversal."""
