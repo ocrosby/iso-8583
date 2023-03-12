@@ -51,6 +51,13 @@ jobs:
         run: |
           python -m invoke coverage
 
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            junit.xml
+
       - name: Report Coverage
         uses: coverallsapp/github-action@master
         with:
