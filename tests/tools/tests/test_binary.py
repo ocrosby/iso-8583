@@ -1,6 +1,7 @@
 import sys
 import pytest
 
+
 def test_creating_4_bytes():
     """Test creating 4 bytes.
 
@@ -108,9 +109,9 @@ def test_byte_compliment():
     data_bytes = bytes(b'\x54')
 
     # Act
-    compliemnt = ~data_bytes[0]
-    compliment = hex(compliemnt)
+    compliment = ~data_bytes[0]
+    compliment = hex(compliment)
 
     # Assert
-    assert f'{compliemnt:b}' == 'AB'
-    assert type(compliemnt) == int
+    assert f'{compliment}' == 'AB'
+    assert type(compliment) == int
