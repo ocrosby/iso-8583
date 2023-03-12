@@ -3,6 +3,7 @@ from typing import List
 
 
 class BitMapType(Enum):
+    Unknown = 0
     Binary = 1
     Hexadecimal = 2
 

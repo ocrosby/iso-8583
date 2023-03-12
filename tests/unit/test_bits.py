@@ -1,4 +1,7 @@
+import pytest
+
 from src.iso8583 import bits
+from src.iso8583.bits import BitMapType
 
 
 class TestFieldNumberToByteOffset:
@@ -292,3 +295,10 @@ class TestTest:
 
         # Assert
         assert not result
+
+
+def test_bitmap_parse_unknown():
+    with pytest.raises(Exception) as err:
+        bits.BitMap.parse('00000000', BitMapType.Unknown)
+
+    assert err.value.args[0] == 'Unknown bitmap type'
