@@ -45,16 +45,6 @@ class BitMap:
 
         return result
 
-    @property
-    def absent(self) -> List[int]:
-        result = []
-
-        for i in range(1, 65):
-            if not self.test(i):
-                result.append(i)
-
-        return result
-
     @staticmethod
     def create_from_binary_string(binary_string: str) -> 'BitMap':
         bitmap = BitMap()
