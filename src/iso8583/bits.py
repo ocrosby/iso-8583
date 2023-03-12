@@ -60,13 +60,6 @@ class BitMap:
         return bitmap
 
     @staticmethod
-    def create_from_bytes(data: bytes) -> 'BitMap':
-        bitmap = BitMap()
-        bitmap.mutable_bytes = bytearray(data)
-
-        return bitmap
-
-    @staticmethod
     def parse(bitmap_value: str, bitmap_type: BitMapType) -> List[int]:
         if bitmap_type == BitMapType.Binary:
             return BitMap.create_from_binary_string(bitmap_value).present
