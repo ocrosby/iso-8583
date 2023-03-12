@@ -4,6 +4,11 @@ Feature: Bitmap
   I want to be able to manipulate bitmaps
   So that I can determine which other data elements or data element subfields are present elsewhere in the message
 
+  Scenario: Parse - Unknown Type
+      Given an unknown bitmap value of whatever
+      When I parse the bitmap
+      Then there should be an error containing Unknown bitmap type
+
   Scenario: Parse - Field 1
     Given a binary bitmap value of 10000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
     When I parse the bitmap
@@ -46,7 +51,6 @@ Feature: Bitmap
     And field 6 should be present
     And all fields other than 6 should be absent
 
-
   Scenario: Parse - Field 7
     Given a binary bitmap value of 00000010 00000000 00000000 00000000 00000000 00000000 00000000 00000000
     When I parse the bitmap
@@ -54,14 +58,12 @@ Feature: Bitmap
     And field 7 should be present
     And all fields other than 7 should be absent
 
-
   Scenario: Parse - Field 8
     Given a binary bitmap value of 00000001 00000000 00000000 00000000 00000000 00000000 00000000 00000000
     When I parse the bitmap
     Then there should be no errors
     And field 8 should be present
     And all fields other than 8 should be absent
-
 
   Scenario: Parse - Field 9
     Given a binary bitmap value of 00000000 10000000 00000000 00000000 00000000 00000000 00000000 00000000

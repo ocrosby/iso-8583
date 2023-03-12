@@ -5,6 +5,11 @@ from pytest_bdd import parsers, scenario, given, when, then
 FEATURE_FILE = '../features/Bitmap.feature'
 
 
+@scenario(FEATURE_FILE, 'Parse - Unknown Type')
+def test_parse_unknown_type():
+    pass
+
+
 @scenario(FEATURE_FILE, 'Parse - Field 1')
 def test_parse_field_1():
     pass
@@ -20,6 +25,12 @@ def test_wikipedia_example():
     pass
 
 
+@given(parsers.parse('an unknown bitmap value of {bitmap_value}'))
+def unknown_bitmap_value(bitmap_value: str, context):
+    context['bitmap_type'] = BitMapType.Unknown
+    context['bitmap_value'] = bitmap_value
+
+
 @given(parsers.parse('a hexadecimal bitmap value of {bitmap_value}'))
 def hexadecimal_bitmap_value(bitmap_value: str, context):
     context['bitmap_type'] = BitMapType.Hexadecimal
@@ -33,11 +44,11 @@ def binary_bitmap_value(bitmap_value: str, context):
 
 
 @when('I parse the bitmap')
-def parse_bitmap(context):
+def parse_bitmap(context, errors):
     try:
         context['result'] = BitMap.parse(context['bitmap_value'], context['bitmap_type'])
     except Exception as err:
-        context['errors'].append(err)
+        errors.append(err)
 
 
 @then(parsers.parse('field {field_number:d} should be present'))
