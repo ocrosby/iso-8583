@@ -24,6 +24,7 @@ def normalize_binary_string(context):
     except Exception as err:
         context['errors'].append(err)
 
+
 @when(parsers.parse('I create an array of {count:d} bytes'))
 def byte_array_entry(count: int, context):
     try:

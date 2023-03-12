@@ -6,7 +6,7 @@ def is_boolean_string(string: str) -> bool:
 
 def string_to_boolean(string: str) -> bool:
     """Convert a string to a boolean."""
-    return not string in ['false', 'False', 'FALSE']
+    return string not in ['false', 'False', 'FALSE']
 
 
 def normalize_binary_string(binary_string: str) -> str:

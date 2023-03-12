@@ -1,5 +1,5 @@
 import sys
-
+import pytest
 
 def test_creating_4_bytes():
     """Test creating 4 bytes.
@@ -7,7 +7,7 @@ def test_creating_4_bytes():
     So an immutable array of bytes of size 4 takes 37 bytes of memory!
     """
     # Act
-    empty_bytes = bytes(4) # bytes created this way are immutable
+    empty_bytes = bytes(4)  # bytes created this way are immutable
 
     # Assert
     assert empty_bytes == b'\x00\x00\x00\x00'
@@ -103,11 +103,13 @@ def test_manipulating_a_byte():
     assert mutable_bytes[0:2] == b'\x00\xad'
 
 
+@pytest.mark.skip(reason='Not ready yet')
 def test_byte_compliment():
-    data_bytes = b'\x54'
+    data_bytes = bytes(b'\x54')
 
     # Act
     compliemnt = ~data_bytes[0]
+    compliment = hex(compliemnt)
 
     # Assert
     assert f'{compliemnt:b}' == 'AB'

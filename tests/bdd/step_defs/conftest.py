@@ -6,6 +6,8 @@ from pytest_bdd import parsers, given, then
 
 from tests.tools.src import conversion
 
+# Global Fixtures
+
 
 @pytest.fixture
 def errors() -> List[Exception]:
@@ -15,6 +17,37 @@ def errors() -> List[Exception]:
 @pytest.fixture
 def context() -> Dict[str, any]:
     return {}
+
+
+# Hooks
+
+
+def pytest_bdd_step_error(request, feature, scenario, step, step_func, step_func_args, exception):
+    errors = request.getfixturevalue('errors')
+    errors.append(exception)
+
+    print(f'Step failed: "{step}"')
+
+
+def pytest_bdd_apply_tag(tag, function):
+    if tag == 'todo':
+        marker = pytest.mark.skip(reason='Not implemented yet')
+        marker(function)
+        return True
+    elif tag == 'skip':
+        marker = pytest.mark.skip(reason='Skipped')
+        marker(function)
+        return True
+    elif tag == 'ignore':
+        marker = pytest.mark.skip(reason='Ignored')
+        marker(function)
+        return True
+    else:
+        # Fall back to the default behavior of pytest-bdd
+        return None
+
+
+# When Steps
 
 
 @given('an empty binary string')
@@ -43,7 +76,12 @@ def validate_result(expected_value: any, context):
 
 @then(parsers.parse('the result should be {expected_value} in hexadecimal'))
 def validate_result_hex(expected_value: str, context):
-    assert hex(int(expected_value)) == context.get('result')
+    expected_value = expected_value.replace(' ', '')
+    expected_bytearray = bytearray.fromhex(expected_value)
+
+    actual_bytearray = context.get('byte_array')
+
+    assert expected_bytearray == actual_bytearray
 
 
 @then(parsers.parse('the result should be {expected_value} in binary'))

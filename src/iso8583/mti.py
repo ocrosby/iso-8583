@@ -15,6 +15,18 @@ class Purpose(Enum):
     NetworkManagement = 8
 
 
+class Function(Enum):
+    Request = 0
+    RequestResponse = 1
+    Advice = 2
+    AdviceResponse = 3
+    Notification = 4
+    NotificationAcknowledgement = 5
+    Instruction = 6
+    InstructionAcknowledgement = 7
+    ReservedByIso = 8
+
+
 class Version(Enum):
     ReservedByIso = -1
     ISO_8583_1987 = 0
@@ -48,6 +60,19 @@ PURPOSE_MAPPING = {
     '7': Purpose.FeeCollection,
     '8': Purpose.NetworkManagement,
     '9': Purpose.ReservedByIso
+}
+
+FUNCTION_MAPPING = {
+    '0': Function.Request,
+    '1': Function.RequestResponse,
+    '2': Function.Advice,
+    '3': Function.AdviceResponse,
+    '4': Function.Notification,
+    '5': Function.NotificationAcknowledgement,
+    '6': Function.Instruction,
+    '7': Function.InstructionAcknowledgement,
+    '8': Function.ReservedByIso,
+    '9': Function.ReservedByIso
 }
 
 
@@ -95,7 +120,8 @@ class MessageTypeIndicator:
             Transmit settlement information message.
 
         Administrative
-            Transmits administrative advice.  Often used for failure messages (e.g., message reject or failure to apply).
+            Transmits administrative advice.  Often used for failure messages
+            (e.g., message reject or failure to apply).
 
         Network
             Used for secure key exchange, logon, echo test and other network functions.
@@ -107,10 +133,19 @@ class MessageTypeIndicator:
 
         return PURPOSE_MAPPING.get(target_digit, None)
 
+    @property
+    def function(self) -> Function:
+        target_digit = self.value[2]
+
+        if not target_digit.isdigit():
+            raise ValueError(f'Invalid message type indicator "{self.value}"!')
+
+        return FUNCTION_MAPPING.get(target_digit, None)
+
     def is_reversal(self) -> bool:
         """Returns whether the message type indicator is a reversal."""
         if self.value is None:
-            raise ValueError(f'Undefined message type indicator!')
+            raise ValueError('Undefined message type indicator!')
 
         if self.purpose != Purpose.ReversalAndChargeback:
             return False
@@ -122,7 +157,7 @@ class MessageTypeIndicator:
     def is_chargeback(self) -> bool:
         """Returns whether the message type indicator is a chargeback."""
         if self.value is None:
-            raise ValueError(f'Undefined message type indicator!')
+            raise ValueError('Undefined message type indicator!')
 
         if self.purpose != Purpose.ReversalAndChargeback:
             return False
