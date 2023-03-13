@@ -67,6 +67,10 @@ def validate_result(expected_value: any, context):
         length = len(result)
 
         assert length == 0
+    elif expected_value == 'null' or expected_value == 'undefined':
+        assert context.get('result') is None
+    elif expected_value == 'defined':
+        assert context.get('result') is not None
     else:
         assert expected_value == context.get('result')
 

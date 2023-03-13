@@ -1,0 +1,8 @@
+field-definitions:
+  # ...
+  # Define a new field type
+  my_field:
+    number: 1
+    length:
+    type: ""
+    description: ""

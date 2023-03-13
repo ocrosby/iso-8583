@@ -2,6 +2,13 @@ from enum import Enum
 from typing import Optional
 
 
+"""
+Digit 1 indicates the version of the message
+Digit 2 indicates the class of the message
+Digit 3 indicates the function of the message
+Digit 4 indicates who initiated the communication
+"""
+
 class Purpose(Enum):
     Unknown = -1
     ReservedByIso = 0
@@ -92,6 +99,19 @@ ORIGIN_MAPPING = {
     '4': Origin.Other,
     '6': Origin.ReservedByIso,
 }
+
+def get_message_version(value: str) -> Version:
+    """Return the version of the message type indicator."""
+    target_digit = value[0]
+
+    if not target_digit.isdigit():
+        raise ValueError(f'Invalid message type indicator "{value}"!')
+
+    return VERSION_MAPPING.get(target_digit, None)
+
+
+get_message_class(value: str) -> Purpose:
+
 
 
 class MessageTypeIndicator:
